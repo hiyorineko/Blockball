@@ -13,7 +13,7 @@ public class GameActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mView = new GameView(this);
-        setContentView(R.layout.activity_game);
+        setContentView(mView);
     }
 
     @Override
