@@ -1,11 +1,11 @@
 package com.example.hiyoriaya.blockball;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class GameActivity extends ActionBarActivity {
+public class GameActivity extends Activity {
 
     private GameView mView;
 
