@@ -8,7 +8,7 @@ import android.graphics.Paint;
  * Created by hiyoriaya on 2016/01/20.
  * ブロックデータ
  */
-public class Block {
+public class Block implements DrawableItem{
     //普遍の項目だけfinalをつける
     private final float mTop;
     private final float mLeft;
@@ -30,7 +30,7 @@ public class Block {
             //耐久がまだあるとき
 
             //ブロック定義
-            paint.setColor(Color.GREEN);
+            paint.setColor(Color.RED);
             paint.setStyle(Paint.Style.FILL);
             canvas.drawRect(mLeft, mTop, mRight, mBottom, paint);
 

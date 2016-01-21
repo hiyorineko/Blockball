@@ -20,7 +20,9 @@ public class GameView extends TextureView implements View.OnTouchListener,Textur
         volatile private boolean mIsRunnable;
         volatile private float mTouchedX;
         volatile private float mTouchedY;
-        private ArrayList<Block> mBlockList;
+        private ArrayList<DrawableItem> mItemList;
+        private Pad mPad;
+        private float mPadHalfWidth;
 
     public GameView(Context context){
         super(context); //親クラスからcontextを受ける
@@ -45,7 +47,10 @@ public class GameView extends TextureView implements View.OnTouchListener,Textur
                             continue;
                         }
                         canvas.drawColor(Color.BLACK);
-                        for (Block item : mBlockList) {
+                        float padLeft = mTouchedX - mPadHalfWidth;
+                        float padRight = mTouchedX + mPadHalfWidth;
+                        mPad.setLeftRight(padLeft,padRight);
+                        for (DrawableItem item : mItemList) {
                             item.draw(canvas, paint);
                         }
                         unlockCanvasAndPost(canvas);
@@ -73,16 +78,22 @@ public class GameView extends TextureView implements View.OnTouchListener,Textur
 
 
     public void readyObjects(int width,int height){
+        //ブロック生成
         float blockWidth = width/10;
         float blockHeight = height/20;
-        mBlockList = new ArrayList<Block>();
+        mItemList = new ArrayList<DrawableItem>();
         for(int i=0;i<100;i++){
             float blockTop = (i/10) * blockHeight;
             float blockLeft = (i%10) * blockWidth;
             float blockBottom = blockTop + blockHeight;
             float blockRight = blockLeft + blockWidth;
-            mBlockList.add(new Block(blockTop,blockLeft,blockBottom,blockRight));
+            mItemList.add(new Block(blockTop,blockLeft,blockBottom,blockRight));
         }
+
+        //パッド生成
+        mPad = new Pad(height * 0.8f,height * 0.85f);
+        mPadHalfWidth = width / 10;
+        mItemList.add(mPad);
     }
 
     @Override
