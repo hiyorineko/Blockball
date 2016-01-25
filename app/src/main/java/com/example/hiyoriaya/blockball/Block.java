@@ -31,12 +31,12 @@ public class Block implements DrawableItem{
 
             //ブロック定義
             paint.setColor(Color.RED);
-            paint.setStyle(Paint.Style.FILL);
+            paint.setStyle(Paint.Style.STROKE);
             canvas.drawRect(mLeft, mTop, mRight, mBottom, paint);
 
             //ブロックの枠線？
             paint.setColor(Color.BLACK);
-            paint.setStyle(Paint.Style.STROKE);
+            paint.setStyle(Paint.Style.FILL);
             paint.setStrokeWidth(4f);//線の幅
             canvas.drawRect(mLeft,mTop,mRight,mBottom,paint);
         }

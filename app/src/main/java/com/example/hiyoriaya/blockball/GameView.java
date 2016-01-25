@@ -23,6 +23,8 @@ public class GameView extends TextureView implements View.OnTouchListener,Textur
         private ArrayList<DrawableItem> mItemList;
         private Pad mPad;
         private float mPadHalfWidth;
+        private Ball mBall;
+        private float mBallRadius;
 
     public GameView(Context context){
         super(context); //親クラスからcontextを受ける
@@ -36,6 +38,7 @@ public class GameView extends TextureView implements View.OnTouchListener,Textur
             @Override
             public void run() {
                 while (true) {
+                    long startTime = System.currentTimeMillis();
                     synchronized (GameView.this) {
                         if (!mIsRunnable) {
                             break;
@@ -50,10 +53,30 @@ public class GameView extends TextureView implements View.OnTouchListener,Textur
                         float padLeft = mTouchedX - mPadHalfWidth;
                         float padRight = mTouchedX + mPadHalfWidth;
                         mPad.setLeftRight(padLeft,padRight);
+                        mBall.move();
+
+                        //当たり判定処理
+                        float ballTop = mBall.getY()-mBallRadius;
+                        float ballLeft = mBall.getX()-mBallRadius;
+                        float ballBottom = mBall.getY() + mBallRadius;
+                        float ballRight = mBall.getX() + mBallRadius;
+                        if(ballLeft<0 && mBall.getSpeedX()<0 || ballRight >= getWidth() && mBall.getSpeedX()>0){
+                            mBall.setSpeedX(-mBall.getSpeedX());    //横反転
+                        }
+                        if(ballTop<0 || ballBottom>getHeight()){
+                            mBall.setSpeedY((-mBall.getSpeedY()));  //縦反転
+                        }
+
                         for (DrawableItem item : mItemList) {
                             item.draw(canvas, paint);
                         }
                         unlockCanvasAndPost(canvas);
+                        long sleeptime = 16 -(System.currentTimeMillis() - startTime);
+                        if(sleeptime > 0){
+                            try{
+                                Thread.sleep(sleeptime);
+                            }catch(InterruptedException e){}
+                        }
                     }
                 }
             }
@@ -94,6 +117,11 @@ public class GameView extends TextureView implements View.OnTouchListener,Textur
         mPad = new Pad(height * 0.8f,height * 0.85f);
         mPadHalfWidth = width / 10;
         mItemList.add(mPad);
+
+        //ボール生成
+        mBallRadius = width < height ? width / 40 :height /40;
+        mBall = new Ball(width/2,height/2,mBallRadius);
+        mItemList.add(mBall);
     }
 
     @Override
